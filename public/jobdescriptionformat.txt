@@ -1,0 +1,49 @@
+Job Title: Senior Full Stack Developer
+
+Company: Tech Innovations Inc.
+Location: San Francisco, CA (Remote possible)
+Experience Required: 5+ years
+
+Job Summary:
+We are looking for an experienced Full Stack Developer to join our growing team. The ideal candidate will have a strong background in both front-end and back-end technologies and be passionate about building scalable web applications.
+
+Key Responsibilities:
+- Develop and maintain web applications using React.js and Node.js
+- Design and implement RESTful APIs and microservices
+- Collaborate with cross-functional teams to define, design, and ship new features
+- Write clean, maintainable, and efficient code
+- Participate in code reviews and provide constructive feedback
+- Troubleshoot, debug and upgrade existing systems
+- Ensure application performance, quality, and responsiveness
+
+Technical Requirements:
+- 5+ years of professional software development experience
+- Strong proficiency in JavaScript/TypeScript
+- Extensive experience with React.js and Node.js
+- Experience with databases (PostgreSQL, MongoDB)
+- Knowledge of cloud platforms (AWS, Azure, or GCP)
+- Experience with Docker and Kubernetes
+- Familiarity with CI/CD pipelines
+- Understanding of agile methodologies
+
+Preferred Qualifications:
+- Experience with GraphQL
+- Knowledge of serverless architectures
+- Experience with testing frameworks (Jest, Cypress)
+- Background in DevOps practices
+
+Soft Skills:
+- Excellent problem-solving abilities
+- Strong communication and teamwork skills
+- Ability to work in a fast-paced environment
+- Continuous learning mindset
+
+Education:
+- Bachelor's degree in Computer Science or related field (or equivalent experience)
+
+Benefits:
+- Competitive salary
+- Health insurance
+- Flexible working hours
+- Remote work options
+- Professional development budget
