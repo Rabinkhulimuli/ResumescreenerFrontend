@@ -7,27 +7,51 @@ import { Upload, FileText } from "lucide-react"
 import { useCallback, useRef, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { toast } from "react-toastify"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
+import { ViewDetailInterface } from "./new-interface"
 
 interface PreviewFile extends File {
   preview: string
 }
-
+interface ScoreBreakdown {
+  semantic_score?: number
+  skill_score?: number
+  related_skill_score?: number
+  experience_score?: number
+  base_score?: number
+  penalty_score?: number
+  final_score?: number
+}
 interface ResumeRankResult {
   resume: string
   is_resume?: boolean
   screening_status?: string
   validation_score?: number
   validation_reasons?: string[]
-  required_experience_years?: number | null
-  resume_experience_years?: number | null
-  experience_gap_years?: number | null
-  cosine_similarity: number
+  domain_detected?: string
+  domain_confidence?: number
+  domain_rationale?: string
+  semantic_similarity?: number
+  cosine_similarity?: number
   skill_match_score: number
+  related_skill_score?: number
   experience_match_score?: number
   final_score: number
   matched_skills: string[]
+  related_skills_detected?: string[]
+  normalized_skills: string[]
   missing_skills: string[]
+  required_experience_years?: number | null
+  resume_experience_years?: number | null
+  experience_gap_years?: number | null
+  required_certifications?: string[]
+  resume_certifications?: string[]
+  missing_certifications?: string[]
+  penalty_score?: number
   recommendation: string
+  explanation?: string
+  summary_points?: string[]
+  score_breakdown?: ScoreBreakdown
 }
 
 export function UploadInterface() {
@@ -216,6 +240,36 @@ export function UploadInterface() {
          {results.length > 0 && (
   <Card className="border shadow-xl rounded-2xl">
     <CardContent className="p-8">
+      <div className="w-full">
+<Dialog>
+  <DialogTrigger asChild className="flex w-full items-center justify-end">
+    <Button className="cursor-pointer w-fit ml-auto">
+      Expand View
+    </Button>
+  </DialogTrigger>
+
+  <DialogContent
+    className="
+      min-w-[95vw]
+      max-w-[1200px]
+      h-[90vh]
+      p-0
+      overflow-hidden
+      flex flex-col
+    "
+  >
+    {/* Header */}
+    <DialogHeader className="px-6 py-4 border-b">
+      <DialogTitle>Resume Details</DialogTitle>
+    </DialogHeader>
+
+    {/* Body */}
+    <div className="flex-1 overflow-y-auto px-6 py-4">
+      <ViewDetailInterface results={results} />
+    </div>
+  </DialogContent>
+</Dialog>
+      </div>
       <div className="flex items-center justify-between mb-6">
         <h5 className="text-2xl font-bold tracking-tight">
           Candidate Ranking
@@ -272,12 +326,12 @@ export function UploadInterface() {
                       <div
                         className="bg-blue-500 h-2 rounded-full"
                         style={{
-                          width: `${(result.cosine_similarity * 100).toFixed(1)}%`,
+                          width: `${(result?.cosine_similarity??1 * 100).toFixed(1)}%`,
                         }}
                       />
                     </div>
                     <p className="text-xs font-medium">
-                      {(result.cosine_similarity * 100).toFixed(1)}%
+                      {(result?.cosine_similarity??1 * 100).toFixed(1)}%
                     </p>
                   </div>
 

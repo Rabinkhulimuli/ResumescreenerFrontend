@@ -1,12 +1,6 @@
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { apiClient } from "@/lib/apiClient"
-import { BadgeCheck, FileText, Radar, Sparkles, Target, Upload } from "lucide-react"
-import { useCallback, useRef, useState } from "react"
-import { useDropzone } from "react-dropzone"
-import { toast } from "react-toastify"
+import { BadgeCheck, FileText, Radar, Sparkles, Target} from "lucide-react"
+import { useState } from "react"
 
 interface PreviewFile extends File {
   preview: string
@@ -203,131 +197,19 @@ function ComparisonTable({ result }: { result: ResumeRankResult }) {
   )
 }
 
-export function UploadInterface() {
+export function ViewDetailInterface({results}:{results: ResumeRankResult[]}) {
   const [files, setFiles] = useState<PreviewFile[]>([])
-  const [description, setDescription] = useState("")
-  const [error, setError] = useState("")
-  const [results, setResults] = useState<ResumeRankResult[]>([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
-  const descriptionRef = useRef<HTMLDivElement>(null)
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    const mappedFiles: PreviewFile[] = acceptedFiles.map((file) => Object.assign(file, { preview: URL.createObjectURL(file) }))
-    setFiles((prev) => [...prev, ...mappedFiles])
-  }, [])
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      "application/pdf": [],
-      "application/msword": [],
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [],
-    },
-    multiple: true,
-  })
-
-  const handleFile = async () => {
-    if (isSubmitting) return
-
-    try {
-      if (description.length < 20) {
-        setError("Job description is required")
-        descriptionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
-        return
-      }
-
-      setError("")
-      setIsSubmitting(true)
-      const formData = new FormData()
-
-      files.forEach((file) => {
-        formData.append("resumes", file)
-      })
-
-      formData.append("job_description", description)
-
-      const response = await apiClient.post<ResumeRankResult[]>("/api/rank-resumes", formData)
-      setResults(response.data)
-      setExpandedIndex(0)
-      toast.success("Resumes ranked successfully")
-      setFiles([])
-    } catch (requestError) {
-      console.error("Upload failed:", requestError)
-      toast.error("Upload failed. Please try again.")
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
+ 
   return (
     <section className="bg-gradient-to-b from-background via-background to-muted/20 px-4 py-20">
       <div className="container mx-auto max-w-6xl">
-        <div className="mb-12 text-center">
-          <h3 className="mb-4 text-4xl font-serif font-bold text-foreground">Explainable ATS Ranking</h3>
-          <p className="mx-auto max-w-3xl text-lg text-muted-foreground">
-            Upload a job description and resumes to get domain-aware ranking, normalized skills, related skills, and a readable explanation for every candidate.
-          </p>
-        </div>
+       
 
         <div className="space-y-8">
-          <Card ref={descriptionRef} className={description.length < 10 ? "border-2 border-red-700 shadow-lg shadow-red-100" : "border border-border/50 shadow-lg"}>
-            <CardContent className="p-8">
-              <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <FileText className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <Label htmlFor="description" className="text-lg font-semibold text-foreground">
-                    Job Description
-                  </Label>
-                  <p className="text-sm text-muted-foreground">Provide the role requirements to classify the domain and score candidates.</p>
-                  {error && <div className="text-sm text-red-700">{error}</div>}
-                </div>
-              </div>
-
-              <Textarea
-                id="description"
-                placeholder="Enter a detailed job description for your candidates..."
-                value={description}
-                onChange={(event) => setDescription(event.target.value)}
-                className="min-h-[140px] resize-none border-border/50 focus:border-primary/50 transition-colors"
-              />
-            </CardContent>
-          </Card>
-
-          <div className="relative">
-            <Card
-              {...getRootProps()}
-              className={`cursor-pointer border-2 border-dashed shadow-lg transition-all duration-200 hover:shadow-xl ${
-                isDragActive ? "scale-[1.02] border-primary bg-primary/5" : "border-primary/30 bg-card hover:border-primary/50 hover:bg-muted/20"
-              }`}
-            >
-              <CardContent className="p-12 text-center">
-                <input {...getInputProps()} />
-                <div className={`mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full transition-colors ${isDragActive ? "bg-primary/20" : "bg-primary/10"}`}>
-                  <Upload className={`h-10 w-10 transition-colors ${isDragActive ? "text-primary" : "text-primary/80"}`} />
-                </div>
-                <h4 className="mb-4 text-2xl font-serif font-semibold text-card-foreground">
-                  {isDragActive ? <span className="text-primary">Drop your files here...</span> : "Drag & drop files here, or click to select"}
-                </h4>
-                <p className="mx-auto mb-6 max-w-xl leading-relaxed text-muted-foreground">
-                  Supports PDF, DOC, and DOCX files. Batch upload multiple resumes to compare domain fit, skills, and explanation data side by side.
-                </p>
-                <Button size="lg" variant="outline" className="bg-transparent font-medium">
-                  Choose Files
-                </Button>
-              </CardContent>
-            </Card>
-
-            {(files.length > 0 || description.trim()) && (
-              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2">
-                <Button onClick={handleFile} size="lg" className="px-8 font-medium shadow-lg transition-all duration-200 hover:shadow-xl" disabled={files.length === 0 || isSubmitting}>
-                  {isSubmitting ? "Submitting..." : "Rank Resumes"}
-                </Button>
-              </div>
-            )}
-          </div>
+         
 
           {files.length > 0 && (
             <Card className="border border-border/50 shadow-lg">
