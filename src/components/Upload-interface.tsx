@@ -111,7 +111,7 @@ export function UploadInterface() {
   }
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-background to-muted/20">
+    <section id="screener" className="scroll-mt-24 py-20 px-4 bg-gradient-to-br from-background to-muted/20">
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-12">
           <h3 className="text-4xl font-serif font-bold text-foreground mb-4">Simple. Fast. Effective.</h3>
