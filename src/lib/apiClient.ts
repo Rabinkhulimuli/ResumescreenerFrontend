@@ -43,7 +43,7 @@ const createApiInstance = ({
     headers: {
       Accept: 'application/json',
     },
-    withCredentials: true, // Include cookies in requests
+    // withCredentials: true, // Include cookies in requests
   });
 
   /**
