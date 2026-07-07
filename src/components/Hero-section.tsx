@@ -3,6 +3,13 @@ import { Badge } from "@/components/ui/badge"
 import { Upload } from "lucide-react"
 
 export function HeroSection() {
+  const scrollToScreener = () => {
+    document.getElementById("screener")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    })
+  }
+
   return (
     <section className="py-20 px-4">
       <div className="container mx-auto text-center max-w-4xl">
@@ -18,11 +25,17 @@ export function HeroSection() {
           and make data-driven hiring decisions.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="text-lg px-8 py-6">
+          <Button size="lg" className="text-lg px-8 py-6 cursor-pointer" onClick={scrollToScreener} type="button">
             Start Screening Now
             <Upload className="ml-2 h-5 w-5" />
           </Button>
-          <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent">
+          <Button
+            variant="outline"
+            size="lg"
+            className="text-lg px-8 py-6 bg-transparent cursor-pointer"
+            onClick={scrollToScreener}
+            type="button"
+          >
             Watch Demo
           </Button>
         </div>
